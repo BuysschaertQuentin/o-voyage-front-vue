@@ -13,16 +13,10 @@ const image = ref()
 
 watchEffect(async () => {
   const country = countries.find((country) => country.name === props.name)
-  console.log(country);
-  
   if (country) {
     const { default: src } = await import(
-      /*@vite-ignore*/ `../public/svg/${country.code.toLowerCase()}.svg`
-      
-      
+      /*@vite-ignore*/ `./src/assets/svg/${country.code.toLowerCase()}.svg`
     )
-    console.log(src);
-    
     image.value = src
   }
 })
