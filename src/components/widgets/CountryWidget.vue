@@ -15,7 +15,8 @@ watchEffect(async () => {
   const country = countries.find((country) => country.name === props.name)
   if (country) {
     const { default: src } = await import(
-      /*@vite-ignore*/ `/src/assets/svg/${country.code.toLowerCase()}.svg`
+      /*@vite-ignore*/ `@/svg/${country.code.toLowerCase()}.svg`
+      
     )
     image.value = src
   }
