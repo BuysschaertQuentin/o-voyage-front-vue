@@ -10,9 +10,9 @@ const props = defineProps({
 
 const alt = computed(() => `Drapeau de ${props.name}`)
 const image = ref()
+const url = `https://o-voyage-en-vue-9gnia.ondigitalocean.app/svg`
 
-
-image.value = `/svg/${props.name.toLowerCase()}.svg`
+image.value = `${url}/${props.name.toLowerCase()}.svg`
 
 </script>
 
