@@ -75,7 +75,7 @@ function setIsOpen(value: boolean) {
           </div>
         </div>
         <div class="w-full flex items-center justify-between py-6">
-          <RouterLink :to="to" class="btn btn-sm btn-base" aria-label="consulter le voyage"
+          <RouterLink :to="travel.to" class="btn btn-sm btn-base" aria-label="consulter le voyage"
             >consulter</RouterLink
           >
           <button
