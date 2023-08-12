@@ -30,7 +30,9 @@ export const useTravelStore = defineStore('travel', {
     },
 
     async getTravelBySlug(slug: string) {
-      this.travel = await travelService.getTravelBySlug(slug)
+      this.travel =
+        this.travels.find((travel) => travel.slug === slug) ||
+        (await travelService.getTravelBySlug(slug))
     },
 
     async deleteTravel(travelId: number) {
@@ -51,3 +53,5 @@ export const useTravelStore = defineStore('travel', {
     }
   }
 })
+
+export type TravelStore = ReturnType<typeof useTravelStore>

@@ -1,5 +1,5 @@
 import { Travel } from '@/models'
-import { ClientService } from '../api/client.service'
+import { ClientService } from '@/services/api/client.service'
 import type { TravelInput } from '@/models/inputs/travel.input'
 
 class TravelService extends ClientService {
@@ -19,6 +19,20 @@ class TravelService extends ClientService {
       numberOfTravelers
       organizerId
       invitationLink
+      activities {
+      id
+      name
+      price
+      location
+      members
+      date
+      time
+      categoryId
+      category {
+        id
+        name
+      }
+    }
       travelers {
         id
         firstname
@@ -48,6 +62,20 @@ class TravelService extends ClientService {
     numberOfTravelers
     invitationLink
     organizerId
+    activities {
+      id
+      name
+      price
+      location
+      members
+      date
+      time
+      categoryId
+      category {
+        id
+        name
+      }
+    }
     travelers {
       id
       firstname

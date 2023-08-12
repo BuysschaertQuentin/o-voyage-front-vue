@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import inputWidget from '@/components/widgets/InputWidget.vue'
+import inputWidget, { type InputWidgetProps } from '@/components/widgets/inputs/InputWidget.vue'
 import ContainerFormWidget from '@/components/widgets/ContainerFormWidget.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@unhead/vue'
 import { useRoute } from 'vue-router'
+import * as Yup from 'yup'
+import { Form } from 'vee-validate'
+import type { SignInInput } from '@/services/auth/auth.service'
 
 useHead({
   title: 'Connexion',
@@ -22,14 +25,13 @@ useHead({
 })
 
 const authStore = useAuthStore()
-const forms = ref([
+const forms = ref<InputWidgetProps[]>([
   {
     name: 'email',
     label: 'Email',
     type: 'email',
     value: '',
     placeholder: 'Entrez votre email',
-    required: true,
     disabled: false,
     autocomplete: 'email',
     isPassword: false
@@ -47,25 +49,27 @@ const forms = ref([
   }
 ])
 
+const schema = Yup.object().shape({
+  email: Yup.string().email('Email invalide').required('Email requis'),
+  password: Yup.string().required('Mot de passe requis')
+})
+
 const route = useRoute()
 const signUp = computed(() => {
   return route.query.redirect ? `/signup?redirect=${route.query.redirect}` : '/signup'
 })
-async function submitForm(event: Event) {
-  event.preventDefault()
-  const email = forms.value[0].value
-  const password = forms.value[1].value
-  await authStore.signIn({ email, password })
+async function submitForm(form: unknown) {
+  await authStore.signIn(form as SignInInput)
 }
-
-const isDisabled = computed(() => {
-  return forms.value[0].value === '' || forms.value[1].value === ''
-})
 </script>
 
 <template>
   <ContainerFormWidget title="Connexion">
-    <form @submit="submitForm" class="flex flex-col gap-8">
+    <Form
+      @submit="submitForm"
+      class="flex flex-col gap-8 w-3/4 md:w-96"
+      :validation-schema="schema"
+    >
       <inputWidget
         v-for="form in forms"
         :key="form.label"
@@ -79,15 +83,10 @@ const isDisabled = computed(() => {
         :autocomplete="form.autocomplete"
         :isPassword="form.isPassword"
       />
-      <button
-        aria-label="submit"
-        type="submit"
-        class="btn btn-primary w-full"
-        :disabled="isDisabled"
-      >
+      <button aria-label="se connecter" type="submit" class="btn btn-primary w-full">
         Se connecter
       </button>
-    </form>
+    </Form>
     <div class="flex">
       <span>Pas encore inscris ?</span>
       <RouterLink :to="signUp" class="text-primary ml-2"> Créer un compte </RouterLink>
